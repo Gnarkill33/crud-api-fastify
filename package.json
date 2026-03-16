@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:dev": "nodemon src/server.ts",
+    "start:prod": "npm run build && node dist/server.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
