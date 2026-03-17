@@ -1,16 +1,12 @@
 import Fastify from "fastify";
 import { PORT } from "./constants.ts";
-import { Store } from "./store.ts";
-
-const store = new Store();
+import { useRoutes } from "./routes.ts";
 
 const fastify = Fastify({
   logger: true,
 });
 
-fastify.get("/api/products", async function handler(request, reply) {
-  return store.getAllProducts();
-});
+fastify.register(useRoutes);
 
 try {
   await fastify.listen({ port: PORT });
