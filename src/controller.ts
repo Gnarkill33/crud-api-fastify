@@ -1,15 +1,15 @@
 import { store } from "./store.ts";
 import type { FastifyRequest, FastifyReply } from "fastify";
 import { validate as uuidValidate } from "uuid";
-import type { ProductTypeNoId } from "./types.ts";
+import type { ProductRequest } from "./types.ts";
 
 export const controller = {
   getAllProducts: (_: FastifyRequest, reply: FastifyReply) => {
     return reply.send(store.getAllProducts());
   },
 
-  getProductById: (request: FastifyRequest, reply: FastifyReply) => {
-    const { productId } = request.params as { productId: string };
+  getProductById: (request: ProductRequest, reply: FastifyReply) => {
+    const { productId } = request.params;
 
     if (!uuidValidate(productId)) {
       return reply.status(400).send({ message: "id is invalid" });
@@ -24,17 +24,17 @@ export const controller = {
     return reply.send(product);
   },
 
-  addProduct: (request: FastifyRequest, reply: FastifyReply) => {
-    const newProduct = request.body as ProductTypeNoId;
+  addProduct: (request: ProductRequest, reply: FastifyReply) => {
+    const newProduct = request.body;
 
     const productWithId = store.addProduct(newProduct);
 
     return reply.status(201).send(productWithId);
   },
 
-  updateProduct: (request: FastifyRequest, reply: FastifyReply) => {
-    const updatedProductInfo = request.body as ProductTypeNoId;
-    const { productId } = request.params as { productId: string };
+  updateProduct: (request: ProductRequest, reply: FastifyReply) => {
+    const updatedProductInfo = request.body;
+    const { productId } = request.params;
 
     if (!uuidValidate(productId)) {
       return reply.status(400).send({ message: "id is invalid" });
@@ -49,8 +49,8 @@ export const controller = {
     return reply.send(updatedProduct);
   },
 
-  deleteProduct: (request: FastifyRequest, reply: FastifyReply) => {
-    const { productId } = request.params as { productId: string };
+  deleteProduct: (request: ProductRequest, reply: FastifyReply) => {
+    const { productId } = request.params;
 
     if (!uuidValidate(productId)) {
       return reply.status(400).send({ message: "id is invalid" });
