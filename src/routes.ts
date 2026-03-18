@@ -36,6 +36,16 @@ const getProductByIdOpts = {
 
 const postProductOpts = {
   schema: {
+    body: {
+      type: "object",
+      required: ["name", "description", "price", "category", "inStock"],
+      properties: {
+        price: {
+          type: "number",
+          minimum: 0,
+        },
+      },
+    },
     response: {
       201: Product,
     },
