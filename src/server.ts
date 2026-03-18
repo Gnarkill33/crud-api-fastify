@@ -14,7 +14,7 @@ fastify.setNotFoundHandler((_, reply) => {
   });
 });
 
-fastify.setErrorHandler(function (_, __, reply) {
+fastify.setErrorHandler((_, __, reply) => {
   reply.status(500).send({ message: "Internal server error" });
 });
 
