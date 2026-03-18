@@ -43,9 +43,25 @@ export const controller = {
     const updatedProduct = store.updateProduct(productId, updatedProductInfo);
 
     if (!updatedProduct) {
-      reply.status(404).send({ message: "Product not found" });
+      return reply.status(404).send({ message: "Product not found" });
     }
 
     return reply.send(updatedProduct);
+  },
+
+  deleteProduct: (request: FastifyRequest, reply: FastifyReply) => {
+    const { productId } = request.params as { productId: string };
+
+    if (!uuidValidate(productId)) {
+      return reply.status(400).send({ message: "id is invalid" });
+    }
+
+    const isDeleted = store.deleteProduct(productId);
+
+    if (!isDeleted) {
+      return reply.status(404).send({ message: "Product not found" });
+    }
+
+    return reply.status(204).send();
   },
 };

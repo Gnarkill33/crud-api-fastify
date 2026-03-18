@@ -45,6 +45,18 @@ export class Store {
 
     return { ...updatedProduct };
   }
+
+  deleteProduct(id: string) {
+    const productIndex = this.products.findIndex(
+      (product) => product.id === id,
+    );
+
+    if (productIndex === -1) return null;
+
+    this.products.splice(productIndex, 1);
+
+    return true;
+  }
 }
 
 export const store = new Store();
