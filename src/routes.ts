@@ -72,6 +72,13 @@ const updateProductOpts = {
   handler: controller.updateProduct,
 };
 
+const deleteProductOpts = {
+  schema: {
+    response: 204,
+  },
+  handler: controller.deleteProduct,
+};
+
 export const useRoutes: FastifyPluginCallback = (
   fastify: FastifyInstance,
   _,
@@ -84,6 +91,8 @@ export const useRoutes: FastifyPluginCallback = (
   fastify.post("/api/products", postProductOpts);
 
   fastify.put("/api/products/:productId", updateProductOpts);
+
+  fastify.delete("/api/products/:productId", deleteProductOpts);
 
   done();
 };
