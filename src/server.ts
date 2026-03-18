@@ -8,6 +8,12 @@ const fastify = Fastify({
 
 fastify.register(useRoutes);
 
+fastify.setNotFoundHandler((_, reply) => {
+  reply.status(404).send({
+    message: "Endpoint not found",
+  });
+});
+
 try {
   await fastify.listen({ port: PORT });
 } catch (err) {
