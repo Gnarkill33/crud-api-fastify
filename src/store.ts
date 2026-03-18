@@ -28,6 +28,23 @@ export class Store {
     this.products.push(newProductWithId);
     return newProductWithId;
   }
+
+  updateProduct(id: string, updatedProductInfo: Omit<ProductType, "id">) {
+    const productIndex = this.products.findIndex(
+      (product) => product.id === id,
+    );
+
+    if (productIndex === -1) return null;
+
+    const updatedProduct = {
+      id,
+      ...updatedProductInfo,
+    };
+
+    this.products[productIndex] = updatedProduct;
+
+    return { ...updatedProduct };
+  }
 }
 
 export const store = new Store();
