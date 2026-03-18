@@ -53,6 +53,25 @@ const postProductOpts = {
   handler: controller.addProduct,
 };
 
+const updateProductOpts = {
+  schema: {
+    body: {
+      type: "object",
+      required: ["name", "description", "price", "category", "inStock"],
+      properties: {
+        price: {
+          type: "number",
+          minimum: 0,
+        },
+      },
+    },
+    response: {
+      200: Product,
+    },
+  },
+  handler: controller.updateProduct,
+};
+
 export const useRoutes: FastifyPluginCallback = (
   fastify: FastifyInstance,
   _,
@@ -63,6 +82,8 @@ export const useRoutes: FastifyPluginCallback = (
   fastify.get("/api/products/:productId", getProductByIdOpts);
 
   fastify.post("/api/products", postProductOpts);
+
+  fastify.put("/api/products/:productId", updateProductOpts);
 
   done();
 };
