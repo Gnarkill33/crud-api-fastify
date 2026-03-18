@@ -28,6 +28,6 @@ export const controller = {
 
     const productWitId = store.addProduct(newProduct);
 
-    return reply.send(productWitId);
+    return reply.status(201).send(productWitId);
   },
 };
