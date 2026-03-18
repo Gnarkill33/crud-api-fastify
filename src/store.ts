@@ -1,4 +1,4 @@
-import { type ProductType } from "./types.ts";
+import { type ProductType, type ProductTypeNoId } from "./types.ts";
 import { randomUUID } from "node:crypto";
 
 export class Store {
@@ -23,13 +23,13 @@ export class Store {
     return { ...product };
   }
 
-  addProduct(newProduct: Omit<ProductType, "id">) {
+  addProduct(newProduct: ProductTypeNoId) {
     const newProductWithId = { ...newProduct, id: randomUUID() };
     this.products.push(newProductWithId);
     return newProductWithId;
   }
 
-  updateProduct(id: string, updatedProductInfo: Omit<ProductType, "id">) {
+  updateProduct(id: string, updatedProductInfo: ProductTypeNoId) {
     const productIndex = this.products.findIndex(
       (product) => product.id === id,
     );

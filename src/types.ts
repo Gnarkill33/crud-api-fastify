@@ -6,3 +6,5 @@ export interface ProductType {
   category: string;
   inStock: boolean;
 }
+
+export type ProductTypeNoId = Omit<ProductType, "id">;

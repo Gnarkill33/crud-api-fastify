@@ -1,7 +1,7 @@
 import { store } from "./store.ts";
 import type { FastifyRequest, FastifyReply } from "fastify";
 import { validate as uuidValidate } from "uuid";
-import type { ProductType } from "./types.ts";
+import type { ProductTypeNoId } from "./types.ts";
 
 export const controller = {
   getAllProducts: (_: FastifyRequest, reply: FastifyReply) => {
@@ -25,7 +25,7 @@ export const controller = {
   },
 
   addProduct: (request: FastifyRequest, reply: FastifyReply) => {
-    const newProduct = request.body as Omit<ProductType, "id">;
+    const newProduct = request.body as ProductTypeNoId;
 
     const productWithId = store.addProduct(newProduct);
 
@@ -33,7 +33,7 @@ export const controller = {
   },
 
   updateProduct: (request: FastifyRequest, reply: FastifyReply) => {
-    const updatedProductInfo = request.body as Omit<ProductType, "id">;
+    const updatedProductInfo = request.body as ProductTypeNoId;
     const { productId } = request.params as { productId: string };
 
     if (!uuidValidate(productId)) {
