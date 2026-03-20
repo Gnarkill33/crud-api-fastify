@@ -3,14 +3,14 @@ import { randomUUID } from "node:crypto";
 
 export class Store {
   private products: ProductType[] = [
-    {
-      id: "1",
-      name: "string",
-      description: "string",
-      price: 24,
-      category: "string",
-      inStock: true,
-    },
+    // {
+    //   id: "1",
+    //   name: "string",
+    //   description: "string",
+    //   price: 24,
+    //   category: "string",
+    //   inStock: true,
+    // },
   ];
 
   getAllProducts() {

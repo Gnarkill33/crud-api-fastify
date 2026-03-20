@@ -2,7 +2,7 @@ import Fastify from "fastify";
 import { PORT } from "./constants.ts";
 import { useRoutes } from "./routes.ts";
 
-const fastify = Fastify({
+export const fastify = Fastify({
   logger: true,
 });
 
@@ -12,10 +12,6 @@ fastify.setNotFoundHandler((_, reply) => {
   reply.status(404).send({
     message: "Endpoint not found",
   });
-});
-
-fastify.setErrorHandler((_, __, reply) => {
-  reply.status(500).send({ message: "Internal server error" });
 });
 
 try {
