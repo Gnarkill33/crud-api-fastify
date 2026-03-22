@@ -135,10 +135,10 @@ Each product object has the following structure:
 ```json
 {
   "id": "uuid",
-  "name": "string" (required),
-  "description": "string" (required),
-  "price": "number" (required, must be > 0),
-  "category": "string" (required),
-  "inStock": "boolean" (required)
+  "name": "string!", // required
+  "description": "string!", // required
+  "price": "number! (>0)", // required, must be > 0
+  "category": "string!", // required
+  "inStock": "boolean!" // required
 }
 ```
