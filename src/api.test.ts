@@ -1,5 +1,7 @@
 import { test, expect } from "vitest";
-import { fastify } from "./server";
+import { startApp } from "./app";
+
+const fastify = startApp();
 
 // SCENARIO 1 - Normal behaviour - status codes 200, 201, 204 (validation, not found paths are not tested here)
 test("GET api/products request should return all products", async () => {
