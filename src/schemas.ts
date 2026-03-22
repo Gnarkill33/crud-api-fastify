@@ -17,7 +17,7 @@ export const getAllProductsOpts = {
     response: {
       200: {
         type: "array",
-        products: Product,
+        items: Product,
       },
     },
   },
@@ -73,7 +73,12 @@ export const updateProductOpts = {
 
 export const deleteProductOpts = {
   schema: {
-    response: 204,
+    response: {
+      204: {
+        type: "null",
+        description: "No content",
+      },
+    },
   },
   handler: controller.deleteProduct,
 };
