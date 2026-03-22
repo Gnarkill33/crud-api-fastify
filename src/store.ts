@@ -1,17 +1,18 @@
-import { type ProductType, type ProductTypeNoId } from "./types.ts";
 import { randomUUID } from "node:crypto";
+import {
+  type PendingRequest,
+  type ProductType,
+  type ProductTypeNoId,
+  type WorkerMessage,
+} from "./types.ts";
+import cluster from "node:cluster";
 
-export class Store {
-  private products: ProductType[] = [
-    // {
-    //   id: "1",
-    //   name: "string",
-    //   description: "string",
-    //   price: 24,
-    //   category: "string",
-    //   inStock: true,
-    // },
-  ];
+class Store {
+  products: ProductType[];
+
+  constructor() {
+    this.products = [];
+  }
 
   getAllProducts() {
     return [...this.products];
@@ -42,7 +43,6 @@ export class Store {
     };
 
     this.products[productIndex] = updatedProduct;
-
     return { ...updatedProduct };
   }
 
@@ -54,9 +54,72 @@ export class Store {
     if (productIndex === -1) return null;
 
     this.products.splice(productIndex, 1);
-
     return true;
   }
 }
 
-export const store = new Store();
+class WorkerStoreProxy {
+  pendingRequests: Map<string | number, PendingRequest>;
+  constructor() {
+    this.pendingRequests = new Map();
+    this.setupMessageHandler();
+  }
+
+  setupMessageHandler(): void {
+    process.on("message", (message: WorkerMessage) => {
+      const pending = this.pendingRequests.get(message.messageId);
+      if (pending) {
+        clearTimeout(pending.timeout);
+        this.pendingRequests.delete(message.messageId);
+        if (message.result !== undefined) {
+          pending.resolve(message.result);
+        } else {
+          pending.reject(new Error("No result"));
+        }
+      }
+    });
+  }
+
+  sendToPrimary(type: string, data: Record<string, unknown> = {}) {
+    return new Promise((resolve, reject) => {
+      const messageId = Date.now() + Math.random();
+
+      const timeout = setTimeout(() => {
+        this.pendingRequests.delete(messageId);
+        reject(new Error("Request timeout"));
+      }, 5000);
+
+      this.pendingRequests.set(messageId, { resolve, reject, timeout });
+      if (process.send) {
+        process.send({ type, ...data, messageId });
+      } else {
+        reject(new Error("Not available"));
+      }
+    });
+  }
+
+  async getAllProducts() {
+    return await this.sendToPrimary("GET_ALL");
+  }
+
+  async getProductById(id: string) {
+    return await this.sendToPrimary("GET_ONE", { id });
+  }
+
+  async addProduct(product: ProductTypeNoId) {
+    return await this.sendToPrimary("ADD", { product });
+  }
+
+  async updateProduct(id: string, updatedProductInfo: ProductTypeNoId) {
+    return await this.sendToPrimary("UPDATE", { id, updatedProductInfo });
+  }
+
+  async deleteProduct(id: string) {
+    return await this.sendToPrimary("DELETE", { id });
+  }
+}
+
+export const store =
+  cluster.isPrimary || !process.env.IS_WORKER
+    ? new Store()
+    : new WorkerStoreProxy();
