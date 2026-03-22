@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "start:dev": "nodemon src/server.ts",
     "start:prod": "npm run build && node dist/server.ts",
+    "start:multi": "node src/cluster.ts",
     "test": "vitest",
     "test:watch": "vitest --watch"
   },
