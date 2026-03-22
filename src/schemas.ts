@@ -41,7 +41,7 @@ export const postProductOpts = {
       properties: {
         price: {
           type: "number",
-          minimum: 0,
+          minimum: 1,
         },
       },
     },
@@ -60,7 +60,7 @@ export const updateProductOpts = {
       properties: {
         price: {
           type: "number",
-          minimum: 0,
+          minimum: 1,
         },
       },
     },
